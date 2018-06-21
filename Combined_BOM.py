@@ -38,6 +38,7 @@ CR1_col		= 0				# Column location for supplier name
 CR1PN_col	= 0				# Column location for supplier's PN
 NOTE_col 	= 0 			#Column location for "notes" field
 BOM_HEADER 	= ["QPN","QTY","DES","MFG","MFGPN","CR1","CR1PN","NOTES"]
+EXTS		= ('.xls')		#Support file extensions
 
 MAX_HITS = 5			#This many hits will trigger us to leave the searching loop
 data_start = 0			#This is the row where the data starts
@@ -97,8 +98,9 @@ if __name__ == '__main__':
 	# Iterate through all files in directory
 	for i in range(len(files)-1):
 		
-		# Search through and open files that are appended with *.xlsx
-		if((files[i].find("xls") != -1) and not (files[i].find("xlsx") != -1)):
+		# Search through and open files that are appended with *.xls
+		# if((files[i].find("xls") != -1) and not (files[i].find("xlsx") != -1)):
+		if(files[i].lower().endswith(ext) for ext in EXTS):
 			
 			workbook = xlrd.open_workbook(files[i])     #Open the workbook that we are going to parse though 
 			worksheets = workbook.sheet_names()             #Grab the names of the worksheets -- I believe this line is critical.
