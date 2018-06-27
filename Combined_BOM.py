@@ -186,40 +186,46 @@ if __name__ == '__main__':
 				header_values = ["Association","QPN","DES","MFG","MFGPN","CR1","CR1PN","QTY","NOTES"]
 				
 				# Now iterate through all rows of the current sheet and populate the data lists
+				blank_row_count = 0		# Reset number of blank rows detected.  When three in a row are detected, break out of the loop. 
 				for curr_row in range (data_start,num_rows + 1):
 					row = current_sheet.row(curr_row)					#Grab the current row
 
 					# If multiple columns are blank, break out of this loop for these are empty cells
 					if( (len(clean_value(str(row[QPN_col]))) <= 1) and ( len(clean_des(str(row[DES_col]))) <= 1) and
 						( len(clean_value(str(row[MFG_col]))) <= 1) ):
-						break
+						blank_row_count += 1				# Increase value of blank row count
+					else:
+						blank_row_count = 0					
+						asso.append(association)				#For each row in the BOM, we need to append the association
+						print ".",
+						
+						current_value = clean_value(str(row[QPN_col]))
+						qpn.append(current_value)			
+						
+						current_value = clean_des(str(row[DES_col]))
+						des.append(current_value)
+						
+						current_value = clean_value(str(row[MFG_col]))
+						mfg.append(current_value)
+						
+						current_value = clean_value(str(row[MFGPN_col]))
+						mfgpn.append(current_value)
+						
+						current_value = clean_value(str(row[CR1_col]))
+						cr1.append(current_value)
+						
+						current_value = clean_value(str(row[CR1PN_col]))
+						cr1pn.append(current_value)
+						
+						current_value = clean_value(str(row[QTY_col]))
+						qty.append(current_value)
+						
+						current_value = clean_des(str(row[NOTE_col]))
+						notes.append(current_value)
+
+					if(blank_row_count >= 3):
+						break								# Too many blank rows detected, so break out of the loop.  
 					
-					asso.append(association)				#For each row in the BOM, we need to append the association
-					print ".",
-					
-					current_value = clean_value(str(row[QPN_col]))
-					qpn.append(current_value)			
-					
-					current_value = clean_des(str(row[DES_col]))
-					des.append(current_value)
-					
-					current_value = clean_value(str(row[MFG_col]))
-					mfg.append(current_value)
-					
-					current_value = clean_value(str(row[MFGPN_col]))
-					mfgpn.append(current_value)
-					
-					current_value = clean_value(str(row[CR1_col]))
-					cr1.append(current_value)
-					
-					current_value = clean_value(str(row[CR1PN_col]))
-					cr1pn.append(current_value)
-					
-					current_value = clean_value(str(row[QTY_col]))
-					qty.append(current_value)
-					
-					current_value = clean_des(str(row[NOTE_col]))
-					notes.append(current_value)
 				print ''   # Space after we print periods
 	
 	ob = xlwt.Workbook()						# Create a document for our combined BOM
