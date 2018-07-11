@@ -167,6 +167,9 @@ if __name__ == '__main__':
 					
 					if( (len(search_header) == 0) ):		# Found all header fields
 						data_start = curr_row + 1			# Plenty of confidence at this point that we've found data start
+						print 'Data appears to start on row: ', data_start
+						row = current_sheet.row(data_start)					#Grab the current row
+						print 'Sample data in start row: ', clean_value(str(row[QPN_col])), ' ', clean_value(str(row[DES_col])), ' ', clean_value(str(row[MFG_col])), ' ', clean_value(str(row[MFGPN_col]))
 						break
 					
 					elif( (curr_row == 10) and (len(search_header) > 0) ):		# Some header fields are missing, so shutdown
@@ -189,15 +192,17 @@ if __name__ == '__main__':
 				blank_row_count = 0		# Reset number of blank rows detected.  When three in a row are detected, break out of the loop. 
 				for curr_row in range (data_start,num_rows + 1):
 					row = current_sheet.row(curr_row)					#Grab the current row
-
+					
+					
 					# If multiple columns are blank, break out of this loop for these are empty cells
 					if( (len(clean_value(str(row[QPN_col]))) <= 1) and ( len(clean_des(str(row[DES_col]))) <= 1) and
 						( len(clean_value(str(row[MFG_col]))) <= 1) ):
 						blank_row_count += 1				# Increase value of blank row count
+						print 'Blank row detected at row (', curr_row, ')'
 					else:
 						blank_row_count = 0					
 						asso.append(association)				#For each row in the BOM, we need to append the association
-						print ".",
+						print 'Sample data current row (', curr_row,'): ', clean_value(str(row[QPN_col])), ' ', clean_value(str(row[DES_col])), ' ', clean_value(str(row[MFG_col])), ' ', clean_value(str(row[MFGPN_col]))
 						
 						current_value = clean_value(str(row[QPN_col]))
 						qpn.append(current_value)			
@@ -226,8 +231,6 @@ if __name__ == '__main__':
 					if(blank_row_count >= 3):
 						break								# Too many blank rows detected, so break out of the loop.  
 					
-				print ''   # Space after we print periods
-	
 	ob = xlwt.Workbook()						# Create a document for our combined BOM
 	Sheet1 = ob.add_sheet("Sheet1")				# Add a sheet to our new workbook
 
@@ -240,20 +243,20 @@ if __name__ == '__main__':
 		Sheet1.write(0,i,header_values[i])
 	
 	# Write rows of the combined BOM
-	for i in range (1,len(asso)):				
-		Sheet1.write(i,0,asso[i])
-		Sheet1.write(i,1,qpn[i])
-		Sheet1.write(i,2,des[i])
-		Sheet1.write(i,3,mfg[i])
-		Sheet1.write(i,4,mfgpn[i])
-		Sheet1.write(i,5,cr1[i])
-		Sheet1.write(i,6,cr1pn[i])
-		Sheet1.write(i,7,qty[i])
-		Sheet1.write(i,8,notes[i])
+	for i in range (len(asso)):				
+		Sheet1.write(i+1,0,asso[i])  #Offset by one to account for header that's been written
+		Sheet1.write(i+1,1,qpn[i])
+		Sheet1.write(i+1,2,des[i])
+		Sheet1.write(i+1,3,mfg[i])
+		Sheet1.write(i+1,4,mfgpn[i])
+		Sheet1.write(i+1,5,cr1[i])
+		Sheet1.write(i+1,6,cr1pn[i])
+		Sheet1.write(i+1,7,qty[i])
+		Sheet1.write(i+1,8,notes[i])
 		print ".",
 
 	ob.save("CombinedBOM.xls")
-	time.sleep(3)
+	null=raw_input('Press enter to close window.')
 
 		
 	# TODO Future work might include eliminating duplicate items on the flat BOM.  

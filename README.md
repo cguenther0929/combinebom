@@ -11,4 +11,6 @@ v0.4 -- Committed just for history's sake.
 
 v0.5 -- Supports reading multiple .xls files, and those files may have multiple sheets.  Association column created so assembly association can be understood when viewing the combined BOM.  File names of the BOM do not matter, if the extension is *.xls, the file will be opened and parsed. Columns that must exist in the BOM are QPN, MFG, MFGPN, Description, QTY, CR1, CR1PN, and Notes.  These columns can be blank, however, the script will not continue if they're missing.  
 
-v00.6 -- No longer break out of the loop at the detection of the first blank row.  This allows for better organization of the BOM, such that header comments can be located on one of the BOM rows.  
+v0.6 -- No longer break out of the loop at the detection of the first blank row.  This allows for better organization of the BOM, such that header comments can be located on one of the BOM rows.  
+
+V0.7 -- Improved debug messages displayed to user when script is running.  Fixed critical bug in which first row of extracted BOM data wasn't printing due to the fact that the for loop iterated over len(asso)-1, essentially.  
