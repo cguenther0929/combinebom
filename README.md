@@ -14,3 +14,5 @@ v0.5 -- Supports reading multiple .xls files, and those files may have multiple 
 v0.6 -- No longer break out of the loop at the detection of the first blank row.  This allows for better organization of the BOM, such that header comments can be located on one of the BOM rows.  
 
 V0.7 -- Improved debug messages displayed to user when script is running.  Fixed critical bug in which first row of extracted BOM data wasn't printing due to the fact that the for loop iterated over len(asso)-1, essentially.  
+
+V1.0 -- Incoming data from cells is now parsed with unicode method in attempt to prevent crashing when unique ascii symbols are encountered.  Opposed to just closing, program will report which file/sheet is invalid so user knows where to make a correction.  The program will not close if there are remaining sheets, but the currently active sheet contains, for example, change descriptions.  
